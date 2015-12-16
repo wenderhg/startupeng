@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pt">
+
+<head>
+    <meta charset="utf-8">
+    <title>Tabuada</title>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+
+<body>
+    <p id="conta"></p>
+    <input type=hidden id="val1" value="1" />
+    <input type=hidden id="val2" value="1" />
+    <table>
+        <thead>
+            <tr>
+                <th>Tabuada</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th></th>
+            </tr>
+        </tbody>
+    </table>
+    
+    <script>
+    
+        escreveConta();
+        
+        function validaResultado() {
+            var val1 = $("#val1").val();
+            var val2 = $("#val2").val();
+            var res = $("#res").val();
+            var resCalculado = val1 * val2;
+            if (res == resCalculado) {
+                $("tbody").append("<tr><td>").append(getValores()).append(res).append("</td></tr>");
+                recalculaValores();
+                escreveConta();
+            }
+        }
+        
+        function getConta() {
+            return "Qual o resultado de: " + getValores();
+        }
+        function getValores() {
+            return $("#val1").val() + " x " + $("#val2").val() + " = ";
+        }
+        
+        function recalculaValores() {
+            var val1 = $("#val1").val();
+            var val2 = $("#val2").val();
+            if (val2 == 10) {
+                val2 = 1;
+                val1++;
+            } else {
+                val2++;
+            }
+            $("#val2").val(val2);
+            $("#val1").val(val1)
+        }
+        
+        function escreveConta() {
+            $("p").empty();
+             $("p").append(getConta()).append('<input type="text" id="res" /><input type=button value="Corrige" onclick="validaResultado()" />');
+        }
+    </script>
+</body>
+
+</html>
