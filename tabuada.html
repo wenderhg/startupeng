@@ -8,9 +8,12 @@
 </head>
 
 <body>
-    <p id="conta"></p>
+    <h1>
+        <p id="conta"></p>
+    </h1>
     <input type=hidden id="val1" value="1" />
     <input type=hidden id="val2" value="1" />
+    <div id="pontos" style="float: right;"><h1>Pontuação: <span>0</span></h1></div>
     <table>
         <thead>
             <tr>
@@ -24,29 +27,42 @@
         </tbody>
     </table>
     
+
     <script>
-    
         escreveConta();
-        
+
         function validaResultado() {
+            if ($("#res").val() == "") {
+                alert("Você precisa informar algum resultado.");
+                return;
+            }
+
             var val1 = $("#val1").val();
             var val2 = $("#val2").val();
             var res = $("#res").val();
             var resCalculado = val1 * val2;
+            var idTableRow = new Date().getTime();
+            $("tbody").append("<tr id='" + idTableRow + "'><td>");
+            $("#" + idTableRow).append(getValores() + res);
             if (res == resCalculado) {
-                $("tbody").append("<tr><td>").append(getValores()).append(res).append("</td></tr>");
+                processaPontos(1);
                 recalculaValores();
-                escreveConta();
+                escreveConta();                
+            } else {
+                $("#" + idTableRow).css("color", "red");
+                processaPontos(-1);
             }
+            $("#res").val("");
         }
-        
+
         function getConta() {
             return "Qual o resultado de: " + getValores();
         }
+
         function getValores() {
             return $("#val1").val() + " x " + $("#val2").val() + " = ";
         }
-        
+
         function recalculaValores() {
             var val1 = $("#val1").val();
             var val2 = $("#val2").val();
@@ -59,10 +75,19 @@
             $("#val2").val(val2);
             $("#val1").val(val1)
         }
-        
+
         function escreveConta() {
             $("p").empty();
-             $("p").append(getConta()).append('<input type="text" id="res" /><input type=button value="Corrige" onclick="validaResultado()" />');
+            $("p").append(getConta()).append('<input type="number" id="res" /><input type=button value="Corrige" onclick="validaResultado()" />');
+        }
+
+        function processaPontos(operador) {
+            var pontos = parseInt($("span").text());
+            var val1 = $("#val1").val();
+            var val2 = $("#val2").val();
+            var incremento = (val1 * val2) * operador;
+            pontos = pontos + incremento;
+            $("span").text(pontos);
         }
     </script>
 </body>
