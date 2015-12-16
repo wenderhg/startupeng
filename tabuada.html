@@ -13,7 +13,8 @@
     </h1>
     <input type=hidden id="val1" value="1" />
     <input type=hidden id="val2" value="1" />
-    <div id="pontos" style="float: right;"><h1>Pontuação: <span>0</span></h1></div>
+    <div id="pontos" style="float: right;">
+        <h1>Pontuação: <span>0</span></h1></div>
     <table>
         <thead>
             <tr>
@@ -26,10 +27,19 @@
             </tr>
         </tbody>
     </table>
-    
+
 
     <script>
-        escreveConta();
+        $(function() {
+            var paramVal1 = qs("val1");
+            var paramVal2 = qs("val2");
+            if (paramVal1 != undefined && paramVal1.length > 0)
+                $("#val1").val(paramVal1);
+            if (paramVal2 != undefined && paramVal2.length > 0)
+                $("#val2").val(paramVal2);
+
+            escreveConta();
+        });
 
         function validaResultado() {
             if ($("#res").val() == "") {
@@ -47,7 +57,7 @@
             if (res == resCalculado) {
                 processaPontos(1);
                 recalculaValores();
-                escreveConta();                
+                escreveConta();
             } else {
                 $("#" + idTableRow).css("color", "red");
                 processaPontos(-1);
@@ -66,7 +76,7 @@
         function recalculaValores() {
             var val1 = $("#val1").val();
             var val2 = $("#val2").val();
-            if (val2 == 10) {
+            if (val2 >= 10) {
                 val2 = 1;
                 val1++;
             } else {
@@ -89,6 +99,13 @@
             pontos = pontos + incremento;
             $("span").text(pontos);
         }
+
+        function qs(key) {
+            key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx meta chars
+            var match = location.search.match(new RegExp("[?&]" + key + "=([^&]+)(&|$)"));
+            return match && decodeURIComponent(match[1].replace(/\+/g, " "));
+        }
+
     </script>
 </body>
 
